@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GiftFlow AI – Donor Matching for Global Health</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F7F5F0;
+  --surface:#FFFFFF;
+  --surface2:#F1EFE8;
+  --border:#E2DFD5;
+  --text:#1C1C1A;
+  --text2:#6B6860;
+  --text3:#9B9890;
+  --green-deep:#04342C;
+  --green-dark:#085041;
+  --green-mid:#0F6E56;
+  --green-bright:#1D9E75;
+  --green-light:#5DCAA5;
+  --green-pale:#9FE1CB;
+  --green-wash:#E1F5EE;
+  --amber:#BA7517;
+  --amber-wash:#FAEEDA;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:16px;line-height:1.6}
+
+/* NAV */
+nav{background:var(--green-deep);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
+.nav-logo{display:flex;align-items:center;gap:8px;color:var(--green-pale);font-size:15px;font-weight:500;letter-spacing:.02em}
+.nav-dot{width:8px;height:8px;border-radius:50%;background:var(--green-bright)}
+.nav-badge{background:rgba(29,158,117,.2);color:var(--green-light);font-size:10px;padding:2px 8px;border-radius:10px;letter-spacing:.05em;text-transform:uppercase}
+
+/* HERO */
+.hero{text-align:center;padding:4rem 1rem 2.5rem;max-width:600px;margin:0 auto}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;background:var(--green-wash);color:var(--green-mid);font-size:12px;font-weight:500;padding:5px 13px;border-radius:20px;margin-bottom:1.25rem;letter-spacing:.04em}
+.hero h1{font-family:'DM Serif Display',serif;font-size:3rem;line-height:1.1;color:var(--text);margin-bottom:.75rem}
+.hero h1 em{font-style:italic;color:var(--green-mid)}
+.hero p{font-size:16px;color:var(--text2);max-width:420px;margin:0 auto 1.5rem}
+.hero-steps{display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap}
+.hero-step{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text2)}
+.step-num{width:22px;height:22px;border-radius:50%;background:var(--green-deep);color:var(--green-pale);font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center}
+
+/* LAYOUT */
+.container{max-width:760px;margin:0 auto;padding:0 1rem 4rem}
+
+/* CARD */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.75rem;margin-bottom:1.25rem}
+.card-label{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:1.25rem}
+
+/* FORM */
+.field{margin-bottom:1.25rem}
+.field:last-child{margin-bottom:0}
+.field label{display:block;font-size:13px;font-weight:500;color:var(--text2);margin-bottom:7px}
+.field select{width:100%;padding:10px 13px;border:1px solid var(--border);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;background:var(--surface2);color:var(--text);outline:none;transition:border .15s;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B6860' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.field select:focus{border-color:var(--green-bright)}
+.checkgroup{display:flex;flex-wrap:wrap;gap:7px}
+.pill{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--border);border-radius:20px;padding:6px 13px;font-size:13px;cursor:pointer;transition:all .15s;background:var(--surface2);color:var(--text2);user-select:none}
+.pill:hover{border-color:var(--green-bright);color:var(--green-mid)}
+.pill.on{background:var(--green-wash);border-color:var(--green-mid);color:var(--green-dark)}
+.pill input{display:none}
+.pill-dot{width:6px;height:6px;border-radius:50%;background:var(--border);flex-shrink:0;transition:background .15s}
+.pill.on .pill-dot{background:var(--green-bright)}
+
+/* BUDGET SLIDER */
+.budget-row{display:flex;align-items:center;gap:14px}
+.budget-val{font-size:1.5rem;font-weight:500;color:var(--green-deep);min-width:90px}
+.budget-sub{font-size:12px;color:var(--text3)}
+input[type=range]{flex:1;-webkit-appearance:none;height:4px;border-radius:2px;background:var(--border);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--green-mid);cursor:pointer;border:2px solid var(--surface)}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--green-mid);cursor:pointer;border:2px solid var(--surface)}
+
+.submit-btn{width:100%;padding:14px;background:var(--green-deep);color:var(--green-pale);border:none;border-radius:11px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:all .2s;margin-top:1.25rem;display:flex;align-items:center;justify-content:center;gap:8px}
+.submit-btn:hover{background:var(--green-dark)}
+.submit-btn:disabled{opacity:.6;cursor:not-allowed}
+.btn-arrow{transition:transform .2s}
+.submit-btn:hover .btn-arrow{transform:translateX(3px)}
+
+/* AI THINKING */
+.ai-thinking{display:none;text-align:center;padding:2.5rem 1rem}
+.thinking-icon{width:52px;height:52px;border-radius:50%;background:var(--green-wash);margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;animation:pulse 1.5s ease-in-out infinite}
+.thinking-icon svg{width:22px;height:22px}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.08);opacity:.8}}
+.thinking-text{font-size:15px;color:var(--text2)}
+.thinking-sub{font-size:13px;color:var(--text3);margin-top:.35rem}
+
+/* RESULTS */
+#results-section{display:none}
+.results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+.results-title{font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--text)}
+.reset-btn{font-size:13px;color:var(--text3);cursor:pointer;background:none;border:1px solid var(--border);padding:6px 13px;border-radius:8px;font-family:'DM Sans',sans-serif;transition:all .15s}
+.reset-btn:hover{border-color:var(--green-bright);color:var(--green-mid)}
+
+/* PROJECT CARD */
+.proj-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.4rem;margin-bottom:1rem;transition:box-shadow .2s}
+.proj-card.best{border-color:var(--green-bright);border-width:1.5px}
+.proj-card:hover{box-shadow:0 4px 20px rgba(4,52,44,.07)}
+.proj-top{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:.5rem}
+.proj-name{font-weight:500;font-size:16px;line-height:1.3}
+.match-badge{flex-shrink:0;background:var(--green-wash);color:var(--green-dark);font-size:11px;font-weight:500;padding:3px 10px;border-radius:10px}
+.proj-meta{font-size:12px;color:var(--text3);margin-bottom:.6rem;display:flex;gap:8px;flex-wrap:wrap}
+.meta-tag{background:var(--surface2);padding:2px 8px;border-radius:5px}
+.proj-reasoning{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:.85rem;font-style:italic}
+.impact-box{background:var(--green-wash);border-radius:9px;padding:10px 13px;font-size:13px;color:var(--green-dark);margin-bottom:.9rem;line-height:1.5}
+.impact-box strong{font-weight:500}
+.proj-footer{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.cpo-note{font-size:12px;color:var(--text3)}
+.donate-btn{padding:8px 20px;background:transparent;border:1.5px solid var(--green-mid);color:var(--green-mid);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .18s}
+.donate-btn:hover{background:var(--green-mid);color:var(--surface)}
+.donate-btn:disabled{opacity:.5;cursor:not-allowed}
+.donated-mark{font-size:13px;color:var(--green-bright);font-weight:500}
+
+/* BEST LABEL */
+.best-label{display:inline-flex;align-items:center;gap:4px;background:var(--green-deep);color:var(--green-pale);font-size:11px;font-weight:500;padding:3px 10px;border-radius:8px;margin-bottom:.75rem;letter-spacing:.03em}
+
+/* DASHBOARD */
+.dashboard{background:var(--green-deep);border-radius:16px;padding:1.75rem;margin-top:.5rem}
+.dash-label{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--green-pale);margin-bottom:1.25rem}
+.dash-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.25rem}
+.dash-metric{background:var(--green-dark);border-radius:11px;padding:1rem}
+.dash-val{font-size:1.5rem;font-weight:500;color:#fff;line-height:1.2}
+.dash-key{font-size:11px;color:var(--green-light);margin-top:3px}
+.donation-list{}
+.donation-item{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--green-pale);padding:7px 0;border-bottom:1px solid rgba(29,158,117,.15)}
+.donation-item:last-child{border-bottom:none}
+.di-proj{font-size:12px;color:var(--green-light)}
+.di-amt{color:#fff;font-weight:500}
+.no-donations{font-size:13px;color:var(--green-light);font-style:italic}
+
+/* AI REASONING SECTION */
+.ai-reasoning-card{border-left:3px solid var(--green-bright);background:var(--green-wash);border-radius:0 10px 10px 0;padding:1rem 1.25rem;margin-bottom:1.25rem}
+.ai-reasoning-label{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--green-mid);margin-bottom:.5rem}
+.ai-reasoning-text{font-size:14px;color:var(--green-dark);line-height:1.65}
+
+/* ERROR */
+.error-box{background:#FCEBEB;border:1px solid #F0959530;border-radius:9px;padding:1rem;font-size:13px;color:#A32D2D;margin-bottom:1rem;display:none}
+
+/* FOOTER */
+footer{text-align:center;padding:2rem 1rem;font-size:12px;color:var(--text3);border-top:1px solid var(--border)}
+footer a{color:var(--green-mid);text-decoration:none}
+
+/* API KEY SETUP */
+.api-setup{background:var(--amber-wash);border:1px solid #EF9F2730;border-radius:12px;padding:1.25rem;margin-bottom:1.25rem}
+.api-setup-label{font-size:12px;font-weight:500;color:var(--amber);margin-bottom:.5rem;letter-spacing:.04em;text-transform:uppercase}
+.api-setup p{font-size:13px;color:#633806;line-height:1.6;margin-bottom:.75rem}
+.api-key-row{display:flex;gap:8px}
+.api-key-row input{flex:1;padding:9px 12px;border:1px solid #EF9F2750;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;background:#fff;outline:none}
+.api-key-row input:focus{border-color:var(--amber)}
+.api-save-btn{padding:9px 16px;background:var(--amber);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;white-space:nowrap}
+.api-saved{font-size:12px;color:var(--green-mid);margin-top:.4rem;display:none}
+
+@media(max-width:540px){
+  .hero h1{font-size:2.2rem}
+  .dash-grid{grid-template-columns:1fr 1fr}
+  .proj-top{flex-direction:column;gap:.4rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo"><div class="nav-dot"></div>GiftFlow AI</div>
+  <span class="nav-badge">Gates Foundation Demo</span>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#0F6E56" stroke-width="1.2"/><path d="M4 6l1.5 1.5L8 4" stroke="#0F6E56" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    AI-Powered Donor Matching
+  </div>
+  <h1>Give where it<br><em>matters most</em></h1>
+  <p>Our AI analyses your giving preferences and recommends the highest-impact global health projects for your budget.</p>
+  <div class="hero-steps">
+    <div class="hero-step"><div class="step-num">1</div>Build your profile</div>
+    <div class="hero-step"><div class="step-num">2</div>AI finds your matches</div>
+    <div class="hero-step"><div class="step-num">3</div>Give & track impact</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- API KEY SETUP -->
+  <div class="api-setup" id="api-setup">
+    <div class="api-setup-label">⚙ Claude AI Setup</div>
+    <p>This prototype uses the Claude API for intelligent donor matching. Enter your Anthropic API key below — it's stored only in your browser and never sent anywhere except Anthropic's servers.</p>
+    <div class="api-key-row">
+      <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." />
+      <button class="api-save-btn" onclick="saveApiKey()">Save key</button>
+    </div>
+    <div class="api-saved" id="api-saved">✓ Key saved. You're ready to match!</div>
+  </div>
+
+  <!-- SURVEY -->
+  <div id="survey-section">
+    <div class="card">
+      <div class="card-label">Step 1 — Your donor profile</div>
+
+      <div class="field">
+        <label>Monthly giving budget</label>
+        <div class="budget-row">
+          <div>
+            <div class="budget-val" id="budget-display">$50</div>
+            <div class="budget-sub">per month</div>
+          </div>
+          <input type="range" id="budget-slider" min="0" max="4" step="1" value="1" oninput="updateBudget(this.value)">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Cause areas you care about</label>
+        <div class="checkgroup" id="causes">
+          <label class="pill on" onclick="togglePill(this)"><div class="pill-dot"></div><input type="checkbox" value="TB" checked>TB</label>
+          <label class="pill on" onclick="togglePill(this)"><div class="pill-dot"></div><input type="checkbox" value="Malaria" checked>Malaria</label>
+          <label class="pill" onclick="togglePill(this)"><div class="pill-dot"></div><input type="checkbox" value="Maternal Health">Maternal Health</label>
+          <label class="pill" onclick="togglePill(this)"><div class="pill-dot"></div><input type="checkbox" value="Child Nutrition">Child Nutrition</label>
+          <label class="pill" onclick="togglePill(this)"><div class="pill-dot"></div><input type="checkbox" value="Clean Water">Clean Water</label>
+          <label class="pill" onclick="togglePill(this)"><div class="pill-dot"></div><input type="checkbox" value="Vaccine Delivery">Vaccine Delivery</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Geographic focus</label>
+        <select id="geo">
+          <option value="Sub-Saharan Africa" selected>Sub-Saharan Africa</option>
+          <option value="South Asia">South Asia</option>
+          <option value="Southeast Asia">Southeast Asia</option>
+          <option value="Global">Global — wherever need is greatest</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Giving style</label>
+        <select id="giving-style">
+          <option value="monthly recurring" selected>Monthly recurring — steady, sustained impact</option>
+          <option value="one-time">One-time gift</option>
+          <option value="event-based">Event-based (birthday, milestone)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>What matters most to you?</label>
+        <div class="checkgroup" id="values">
+          <label class="pill on" onclick="togglePill(this)"><div class="pill-dot"></div><input type="checkbox" value="Cost-effectiveness" checked>Cost-effectiveness</label>
+          <label class="pill" onclick="togglePill(this)"><div class="pill-dot"></div><input type="checkbox" value="Innovation">Innovation</label>
+          <label class="pill on" onclick="togglePill(this)"><div class="pill-dot"></div><input type="checkbox" value="Community ownership" checked>Community ownership</label>
+          <label class="pill" onclick="togglePill(this)"><div class="pill-dot"></div><input type="checkbox" value="Transparency">Transparency</label>
+          <label class="pill" onclick="togglePill(this)"><div class="pill-dot"></div><input type="checkbox" value="Scale">Scale</label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Your connection to global health (optional)</label>
+        <select id="connection">
+          <option value="none">No personal connection</option>
+          <option value="affected community">I'm from or connected to an affected community</option>
+          <option value="healthcare worker">I work in healthcare</option>
+          <option value="researcher">I'm a researcher or academic</option>
+          <option value="philanthropist">Experienced philanthropist</option>
+        </select>
+      </div>
+
+      <div class="error-box" id="error-box">⚠ Could not reach the Claude API. Please check your API key above or try again.</div>
+
+      <button class="submit-btn" id="match-btn" onclick="runAIMatching()">
+        <span>Find my AI-matched projects</span>
+        <span class="btn-arrow">→</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- THINKING STATE -->
+  <div id="thinking-section" class="ai-thinking">
+    <div class="thinking-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+    </div>
+    <div class="thinking-text">Claude is analysing your profile…</div>
+    <div class="thinking-sub" id="thinking-step">Reviewing 6 vetted global health projects</div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results-section">
+    <div class="results-header">
+      <div class="results-title">Your AI matches</div>
+      <button class="reset-btn" onclick="resetAll()">← Edit profile</button>
+    </div>
+
+    <div id="ai-reasoning-container"></div>
+    <div id="project-cards"></div>
+
+    <!-- DASHBOARD -->
+    <div class="dashboard">
+      <div class="dash-label">Impact dashboard</div>
+      <div class="dash-grid">
+        <div class="dash-metric"><div class="dash-val" id="d-total">$0</div><div class="dash-key">Total donated</div></div>
+        <div class="dash-metric"><div class="dash-val" id="d-outcomes">0</div><div class="dash-key">Lives reached</div></div>
+        <div class="dash-metric"><div class="dash-val" id="d-projects">0</div><div class="dash-key">Projects supported</div></div>
+      </div>
+      <div id="donation-list"><p class="no-donations">Your impact story starts here — donate to a matched project above.</p></div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  GiftFlow AI &nbsp;·&nbsp; Gates Foundation Grand Challenge Demo &nbsp;·&nbsp;
+  Built by <a href="mailto:mdundebs@gmail.com">Mduduzi Ndebele</a> &nbsp;·&nbsp;
+  Powered by <a href="https://anthropic.com" target="_blank">Claude AI</a>
+</footer>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+const BUDGETS = [10, 50, 100, 500, 1000];
+
+const PROJECTS = [
+  {
+    id: 'zm-tb',
+    name: 'ZuriMed TB Screening — Zimbabwe',
+    cause: 'TB',
+    geo: 'Sub-Saharan Africa',
+    cpo: 0.50,
+    unit: 'people screened',
+    description: 'AI-assisted mobile screening units deployed across Zimbabwe\'s high-burden rural districts. Same-day results using portable X-ray and GeneXpert. Reaches communities 50+ km from the nearest clinic. 94% sensitivity for pulmonary TB.',
+    values: ['Cost-effectiveness', 'Innovation'],
+    costNote: '$0.50 per person screened'
+  },
+  {
+    id: 'ke-malaria',
+    name: 'Malaria Net Distribution — Kenya',
+    cause: 'Malaria',
+    geo: 'Sub-Saharan Africa',
+    cpo: 5,
+    unit: 'nets distributed',
+    description: 'Community health workers distribute long-lasting insecticidal nets in Kenya\'s lake region. Prioritises children under five and pregnant women. Includes community education and follow-up visits to ensure correct use.',
+    values: ['Community ownership', 'Cost-effectiveness', 'Scale'],
+    costNote: '$5 per net (protects a family for 3 years)'
+  },
+  {
+    id: 'ug-maternal',
+    name: 'Maternal Health Clinics — Uganda',
+    cause: 'Maternal Health',
+    geo: 'Sub-Saharan Africa',
+    cpo: 25,
+    unit: 'safe deliveries supported',
+    description: 'Village-level clinics staffed with skilled birth attendants in Uganda\'s Northern Region. Includes antenatal care, skilled delivery, and postnatal follow-up. Has reduced maternal mortality in target areas by 43%.',
+    values: ['Community ownership', 'Transparency'],
+    costNote: '$25 per safe delivery'
+  },
+  {
+    id: 'bd-nutrition',
+    name: 'Child Nutrition Programme — Bangladesh',
+    cause: 'Child Nutrition',
+    geo: 'South Asia',
+    cpo: 8,
+    unit: 'children treated',
+    description: 'Therapeutic feeding programme for severely malnourished children under two in Cox\'s Bazar. Uses community-based management with ready-to-use therapeutic food (RUTF). 94% recovery rate; integrates with local health systems.',
+    values: ['Cost-effectiveness', 'Transparency', 'Scale'],
+    costNote: '$8 per child treated for acute malnutrition'
+  },
+  {
+    id: 'et-water',
+    name: 'Solar Water Hubs — Ethiopia',
+    cause: 'Clean Water',
+    geo: 'Sub-Saharan Africa',
+    cpo: 3,
+    unit: 'people with safe water access',
+    description: 'Solar-powered borehole installations providing clean drinking water to remote Ethiopian communities year-round. Trained local mechanics maintain the systems; water committees manage pricing and access.',
+    values: ['Innovation', 'Community ownership'],
+    costNote: '$3 per person reached (for 10+ years)'
+  },
+  {
+    id: 'in-vaccine',
+    name: 'Last-Mile Vaccine Delivery — India',
+    cause: 'Vaccine Delivery',
+    geo: 'South Asia',
+    cpo: 2,
+    unit: 'children fully vaccinated',
+    description: 'Digital tracking and cold-chain logistics for childhood vaccines in Maharashtra\'s hardest-to-reach tribal blocks. Uses SMS reminders, community health workers, and real-time dashboards. Increased coverage from 42% to 81%.',
+    values: ['Innovation', 'Transparency', 'Scale'],
+    costNote: '$2 per child fully vaccinated'
+  }
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let donations = JSON.parse(localStorage.getItem('gf_donations') || '[]');
+let currentBudget = 50;
+let currentResults = [];
+
+// ── UI HELPERS ────────────────────────────────────────────────────────────────
+function updateBudget(idx) {
+  currentBudget = BUDGETS[parseInt(idx)];
+  document.getElementById('budget-display').textContent = '$' + currentBudget.toLocaleString();
+}
+
+function togglePill(el) {
+  el.classList.toggle('on');
+  const cb = el.querySelector('input');
+  cb.checked = !cb.checked;
+}
+
+function getChecked(groupId) {
+  return [...document.querySelectorAll('#' + groupId + ' input[type=checkbox]')]
+    .filter(c => c.checked).map(c => c.value);
+}
+
+function saveApiKey() {
+  const key = document.getElementById('api-key-input').value.trim();
+  if (!key) return;
+  localStorage.setItem('gf_api_key', key);
+  document.getElementById('api-saved').style.display = 'block';
+  document.getElementById('api-key-input').value = '●'.repeat(20);
+}
+
+function getApiKey() {
+  return localStorage.getItem('gf_api_key') || '';
+}
+
+// Pre-fill if saved
+window.addEventListener('load', () => {
+  if (getApiKey()) {
+    document.getElementById('api-key-input').value = '●'.repeat(20);
+    document.getElementById('api-saved').style.display = 'block';
+  }
+  updateDashboard();
+});
+
+// ── AI MATCHING ───────────────────────────────────────────────────────────────
+async function runAIMatching() {
+  const apiKey = getApiKey();
+  const causes = getChecked('causes');
+  const values = getChecked('values');
+  const geo = document.getElementById('geo').value;
+  const style = document.getElementById('giving-style').value;
+  const connection = document.getElementById('connection').value;
+
+  document.getElementById('error-box').style.display = 'none';
+  document.getElementById('match-btn').disabled = true;
+
+  // Show thinking state
+  document.getElementById('survey-section').style.display = 'none';
+  document.getElementById('thinking-section').style.display = 'block';
+
+  const steps = [
+    'Reviewing 6 vetted global health projects…',
+    'Scoring projects against your cause interests…',
+    'Calculating cost-per-outcome for your budget…',
+    'Writing personalised impact statements…',
+    'Finalising your top 3 matches…'
+  ];
+  let stepIdx = 0;
+  const stepEl = document.getElementById('thinking-step');
+  const stepTimer = setInterval(() => {
+    stepIdx = (stepIdx + 1) % steps.length;
+    stepEl.textContent = steps[stepIdx];
+  }, 1400);
+
+  const projectSummary = PROJECTS.map(p =>
+    `- ID: ${p.id} | Name: ${p.name} | Cause: ${p.cause} | Geography: ${p.geo} | Cost per outcome: $${p.cpo} per ${p.unit} | Values: ${p.values.join(', ')} | Description: ${p.description}`
+  ).join('\n');
+
+  const prompt = `You are an expert philanthropic advisor helping a donor find the best global health projects to support.
+
+DONOR PROFILE:
+- Monthly budget: $${currentBudget}
+- Cause interests: ${causes.length > 0 ? causes.join(', ') : 'Open to all causes'}
+- Geographic focus: ${geo}
+- Giving style: ${style}
+- Values that matter most: ${values.length > 0 ? values.join(', ') : 'Open'}
+- Connection to global health: ${connection}
+
+AVAILABLE PROJECTS:
+${projectSummary}
+
+TASK:
+1. Select the top 3 projects that best match this donor's profile.
+2. For each, calculate how many outcomes their $${currentBudget} budget could achieve.
+3. Write a short, personalised reasoning (2–3 sentences) for why this project fits this specific donor — reference their causes, values, or geography.
+4. Write a compelling, specific impact statement (1 sentence) showing what their $${currentBudget} monthly budget achieves.
+5. Assign a match percentage (60–99%) based on alignment.
+6. Write a brief overall donor summary (2 sentences) explaining the giving strategy you're recommending.
+
+Respond ONLY with a valid JSON object — no markdown, no backticks, no explanation outside the JSON:
+{
+  "donorSummary": "string",
+  "matches": [
+    {
+      "projectId": "string",
+      "matchPercent": number,
+      "reasoning": "string",
+      "impactStatement": "string",
+      "outcomesAchieved": number
+    }
+  ]
+}`;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1200,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    clearInterval(stepTimer);
+
+    if (!response.ok) throw new Error('API error: ' + response.status);
+
+    const data = await response.json();
+    const rawText = data.content.map(b => b.text || '').join('');
+    const cleaned = rawText.replace(/```json|```/g, '').trim();
+    const result = JSON.parse(cleaned);
+
+    // Map project IDs back to full project objects
+    currentResults = result.matches.map(m => {
+      const proj = PROJECTS.find(p => p.id === m.projectId);
+      return { ...proj, ...m };
+    }).filter(Boolean);
+
+    renderResults(result.donorSummary, currentResults);
+
+  } catch (err) {
+    clearInterval(stepTimer);
+    console.error(err);
+
+    // Fallback to local scoring if API fails
+    const fallback = localScoring(causes, values, geo);
+    currentResults = fallback;
+    renderResults(null, fallback);
+
+    if (apiKey) {
+      document.getElementById('error-box').style.display = 'block';
+    }
+  }
+
+  document.getElementById('thinking-section').style.display = 'none';
+  document.getElementById('results-section').style.display = 'block';
+  document.getElementById('match-btn').disabled = false;
+}
+
+// ── LOCAL FALLBACK SCORING ────────────────────────────────────────────────────
+function localScoring(causes, values, geo) {
+  return PROJECTS.map(p => {
+    let score = 0;
+    if (causes.includes(p.cause)) score += 40;
+    if (p.geo === geo) score += 20;
+    values.forEach(v => { if (p.values.includes(v)) score += 12; });
+    const outcomes = Math.floor(currentBudget / p.cpo);
+    if (outcomes >= 5) score += 8;
+    return {
+      ...p,
+      matchPercent: Math.min(Math.max(score, 55), 97),
+      reasoning: `This project aligns with your interest in ${p.cause.toLowerCase()} and your focus on ${p.geo}.`,
+      impactStatement: `Your $${currentBudget}/month could support ${outcomes.toLocaleString()} ${p.unit}.`,
+      outcomesAchieved: outcomes
+    };
+  }).sort((a, b) => b.matchPercent - a.matchPercent).slice(0, 3);
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function renderResults(donorSummary, matches) {
+  // AI reasoning block
+  const aiContainer = document.getElementById('ai-reasoning-container');
+  if (donorSummary) {
+    aiContainer.innerHTML = `
+      <div class="ai-reasoning-card">
+        <div class="ai-reasoning-label">Claude's giving strategy for you</div>
+        <div class="ai-reasoning-text">${donorSummary}</div>
+      </div>`;
+  } else {
+    aiContainer.innerHTML = '';
+  }
+
+  // Project cards
+  const container = document.getElementById('project-cards');
+  container.innerHTML = '';
+
+  matches.forEach((p, i) => {
+    const alreadyDonated = donations.some(d => d.projectId === p.id);
+    const card = document.createElement('div');
+    card.className = 'proj-card' + (i === 0 ? ' best' : '');
+    card.innerHTML = `
+      ${i === 0 ? '<div class="best-label">★ Top match for you</div>' : ''}
+      <div class="proj-top">
+        <div class="proj-name">${p.name}</div>
+        <div class="match-badge">${p.matchPercent}% match</div>
+      </div>
+      <div class="proj-meta">
+        <span class="meta-tag">${p.cause}</span>
+        <span class="meta-tag">${p.geo}</span>
+        <span class="meta-tag">${p.costNote}</span>
+      </div>
+      <div class="proj-reasoning">"${p.reasoning}"</div>
+      <div class="impact-box"><strong>Your impact:</strong> ${p.impactStatement}</div>
+      <div class="proj-footer">
+        <span class="cpo-note">${p.outcomesAchieved.toLocaleString()} ${p.unit} per month</span>
+        ${alreadyDonated
+          ? '<span class="donated-mark">✓ Donated</span>'
+          : `<button class="donate-btn" id="btn-${p.id}" onclick="donate('${p.id}','${p.name.replace(/'/g,"\\'")}',${currentBudget},${p.outcomesAchieved},'${p.unit}')">Donate $${currentBudget}</button>`
+        }
+      </div>`;
+    container.appendChild(card);
+  });
+
+  updateDashboard();
+}
+
+// ── DONATE ────────────────────────────────────────────────────────────────────
+function donate(projectId, name, amount, outcomes, unit) {
+  const d = {
+    projectId,
+    name,
+    amount,
+    outcomes,
+    unit,
+    date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+  };
+  donations.push(d);
+  localStorage.setItem('gf_donations', JSON.stringify(donations));
+
+  const btn = document.getElementById('btn-' + projectId);
+  if (btn) {
+    btn.outerHTML = '<span class="donated-mark">✓ Donated</span>';
+  }
+  updateDashboard();
+}
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
+function updateDashboard() {
+  const total = donations.reduce((s, d) => s + d.amount, 0);
+  const outcomes = donations.reduce((s, d) => s + d.outcomes, 0);
+  const uniqueProjects = new Set(donations.map(d => d.projectId)).size;
+
+  document.getElementById('d-total').textContent = '$' + total.toLocaleString();
+  document.getElementById('d-outcomes').textContent = outcomes.toLocaleString();
+  document.getElementById('d-projects').textContent = uniqueProjects;
+
+  const list = document.getElementById('donation-list');
+  if (donations.length === 0) {
+    list.innerHTML = '<p class="no-donations">Your impact story starts here — donate to a matched project above.</p>';
+    return;
+  }
+  list.innerHTML = donations.slice().reverse().map(d => `
+    <div class="donation-item">
+      <div>
+        <div style="color:#fff;font-size:13px">${d.name.split('—')[0].trim()}</div>
+        <div class="di-proj">${d.date} · ${d.outcomes.toLocaleString()} ${d.unit}</div>
+      </div>
+      <div class="di-amt">$${d.amount}</div>
+    </div>`).join('');
+}
+
+// ── RESET ─────────────────────────────────────────────────────────────────────
+function resetAll() {
+  document.getElementById('results-section').style.display = 'none';
+  document.getElementById('survey-section').style.display = 'block';
+}
+</script>
+</body>
+</html>
